@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Netflix Video Helper",
+  "version": "0.2.2",
+  "description": "Simple Netflix video info and play/pause controls.",
+  "action": {
+    "default_title": "Netflix Party",
+    "default_popup": "popup.html"
+  },
+  "permissions": ["storage", "tabs", "activeTab"],
+  "host_permissions": ["https://www.netflix.com/*", "https://api.stormeydev.com/*", "https://corsproxy.io/*"],
+  "web_accessible_resources": [
+    {
+      "resources": ["page-bridge.js", "page-ui.js", "setup.html"],
+      "matches": ["https://www.netflix.com/*"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://api.stormeydev.com https://corsproxy.io ws: wss:"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.netflix.com/*"],
+      "js": ["content-script.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
