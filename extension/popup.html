@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Netflix Connect</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { 
+        font: 13px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; 
+        background: #121212; 
+        color: #e5e5e5; 
+        padding: 0; 
+        width: 100%;
+        min-width: 320px;
+      }
+      .header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        border-bottom: 1px solid #282828;
+      }
+      h1 { 
+        font-size: 18px; 
+        font-weight: 600; 
+        color: #ffffff;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .settings-btn {
+        background: none;
+        border: none;
+        color: #e5e5e5;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 8px;
+        transition: all 0.2s ease;
+      }
+      .settings-btn:hover {
+        color: #e50914;
+        transform: rotate(20deg);
+      }
+      .content {
+        padding: 16px;
+      }
+      .hint { 
+        color: #b3b3b3; 
+        font-size: 12px; 
+        margin-bottom: 18px;
+        line-height: 1.5;
+      }
+      .status-line {
+        background: #1b1b1b;
+        border: 1px solid #282828;
+        border-radius: 10px;
+        padding: 12px;
+        font-size: 12px;
+        margin-bottom: 12px;
+      }
+      .state-detail {
+        color: #b3b3b3;
+        font-size: 11px;
+        margin-top: 6px;
+      }
+      .row { margin: 12px 0; }
+      button { 
+        width: 100%; 
+        padding: 11px; 
+        border: none; 
+        border-radius: 24px; 
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer; 
+        transition: all 0.2s ease;
+      }
+      button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        transform: none;
+      }
+      button.primary { 
+        background: #e50914; 
+        color: white; 
+      }
+      button.primary:hover { 
+        background: #f20817;
+        transform: scale(1.02);
+      }
+      button.secondary { 
+        background: #282828; 
+        color: #e5e5e5; 
+        border: 1px solid #404040;
+      }
+      button.secondary:hover { 
+        background: #333333;
+      }
+      .status { 
+        margin-top: 12px; 
+        padding: 10px; 
+        border-radius: 6px;
+        text-align: center;
+        font-size: 11px;
+      }
+      .error { 
+        background: #5f1f1f;
+        color: #ff6b6b;
+      }
+      .ok { 
+        background: #1f3f1f;
+        color: #51cf66;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Hello <span id="userName">Friend</span></h1>
+      <button class="settings-btn" id="settingsBtn" title="Settings">⚙</button>
+    </div>
+    <div class="content">
+      <div class="hint" id="hintText">Connect with each other</div>
+
+      <div class="status-line">
+        <div id="connStatus">Ready</div>
+        <div class="state-detail" id="stateDetail"></div>
+      </div>
+
+      <div class="row">
+        <button id="invite" class="primary">Invite</button>
+      </div>
+
+      <div class="row" id="acceptRow" style="display:none;">
+        <button id="accept" class="secondary">Accept Invite</button>
+      </div>
+
+      <div class="row">
+        <button id="refresh" class="secondary">Refresh</button>
+      </div>
+
+      <div class="status" id="status"></div>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
