@@ -1,0 +1,419 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Netflix Connect</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap');
+      
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      
+      body { 
+        font: 13px/1.4 'Inter', system-ui, -apple-system, sans-serif; 
+        background: #141414;
+        color: #e5e5e5; 
+        width: 360px;
+        min-height: 420px;
+        overflow-x: hidden;
+      }
+      
+      /* Header */
+      .header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        background: #0a0a0a;
+        border-bottom: 1px solid #222;
+      }
+      
+      .netflix-logo {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 28px;
+        color: #e50914;
+        line-height: 1;
+      }
+      
+      .header-info {
+        flex: 1;
+      }
+      
+      .header-title { 
+        font-size: 14px; 
+        font-weight: 600; 
+        color: #fff;
+      }
+      
+      .header-title span { color: #e50914; }
+      
+      .header-sub {
+        font-size: 11px;
+        color: #666;
+        margin-top: 2px;
+      }
+      
+      .settings-btn {
+        background: transparent;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 8px;
+        border-radius: 50%;
+        transition: all 0.2s;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .settings-btn:hover {
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+      }
+      
+      /* Tabs */
+      .tabs {
+        display: flex;
+        background: #0d0d0d;
+        padding: 0 8px;
+      }
+      
+      .tab-btn {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: #666;
+        padding: 12px 4px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        width: auto;
+      }
+      
+      .tab-btn:hover { color: #999; }
+      
+      .tab-btn.active {
+        color: #fff;
+        border-bottom-color: #e50914;
+      }
+      
+      /* Content */
+      .content {
+        padding: 16px;
+      }
+      
+      .tab-content {
+        display: none;
+        animation: fadeIn 0.15s ease;
+      }
+      
+      .tab-content.active { display: block; }
+      
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      
+      /* Connect Tab */
+      .connect-status {
+        background: #1a1a1a;
+        border-radius: 8px;
+        padding: 14px;
+        margin-bottom: 14px;
+        border-left: 3px solid #e50914;
+      }
+      
+      .connect-status-main {
+        font-weight: 600;
+        color: #fff;
+        font-size: 13px;
+      }
+      
+      .connect-status-sub {
+        color: #666;
+        font-size: 11px;
+        margin-top: 4px;
+      }
+      
+      .btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      button { 
+        width: 100%; 
+        padding: 12px 16px; 
+        border: none; 
+        border-radius: 4px; 
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer; 
+        transition: all 0.2s;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      
+      button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      
+      button.primary { 
+        background: #e50914;
+        color: white; 
+      }
+      
+      button.primary:hover:not(:disabled) { 
+        background: #f40612;
+      }
+      
+      button.secondary { 
+        background: rgba(255,255,255,0.1);
+        color: #fff; 
+      }
+      
+      button.secondary:hover:not(:disabled) { 
+        background: rgba(255,255,255,0.15);
+      }
+      
+      /* List styles */
+      .list-container {
+        max-height: 260px;
+        overflow-y: auto;
+        margin: -8px;
+        padding: 8px;
+      }
+      
+      .list-container::-webkit-scrollbar { width: 4px; }
+      .list-container::-webkit-scrollbar-track { background: transparent; }
+      .list-container::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+      
+      .list-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.15s;
+        margin-bottom: 4px;
+      }
+      
+      .list-item:hover { background: rgba(255,255,255,0.05); }
+      
+      .list-item-thumb {
+        width: 56px;
+        height: 32px;
+        border-radius: 3px;
+        object-fit: cover;
+        background: #222;
+        flex-shrink: 0;
+      }
+      
+      .list-item-info { flex: 1; min-width: 0; }
+      
+      .list-item-title {
+        font-size: 12px;
+        font-weight: 500;
+        color: #fff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .list-item-meta {
+        font-size: 10px;
+        color: #666;
+        margin-top: 2px;
+      }
+      
+      .list-item-action {
+        flex-shrink: 0;
+        background: transparent;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        padding: 6px;
+        font-size: 14px;
+        width: auto;
+        border-radius: 4px;
+        transition: all 0.15s;
+      }
+      
+      .list-item-action:hover {
+        color: #e50914;
+        background: rgba(229,9,20,0.1);
+      }
+      
+      .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #444;
+      }
+      
+      .empty-state-icon {
+        font-size: 36px;
+        margin-bottom: 10px;
+        opacity: 0.6;
+      }
+      
+      .empty-state-text {
+        font-size: 12px;
+        color: #555;
+      }
+      
+      .empty-state-sub {
+        font-size: 10px;
+        color: #444;
+        margin-top: 4px;
+      }
+      
+      /* Stats */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      
+      .stat-card {
+        background: #1a1a1a;
+        border-radius: 8px;
+        padding: 14px 12px;
+        text-align: center;
+      }
+      
+      .stat-value {
+        font-size: 22px;
+        font-weight: 700;
+        color: #e50914;
+      }
+      
+      .stat-label {
+        font-size: 9px;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 4px;
+      }
+      
+      .stat-card.highlight {
+        grid-column: span 2;
+        background: linear-gradient(135deg, #1a1a1a 0%, #141414 100%);
+        border: 1px solid #222;
+      }
+      
+      .stats-footer {
+        text-align: center;
+        font-size: 10px;
+        color: #444;
+        margin-top: 12px;
+      }
+      
+      /* Toast status */
+      .status-toast {
+        position: fixed;
+        bottom: 16px;
+        left: 16px;
+        right: 16px;
+        padding: 10px 14px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 500;
+        text-align: center;
+        animation: slideUp 0.2s ease;
+        z-index: 100;
+      }
+      
+      @keyframes slideUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .status-toast.error { background: #541414; color: #ff6b6b; }
+      .status-toast.ok { background: #0d3d14; color: #51cf66; }
+      .status-toast:empty { display: none; }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="netflix-logo">N</div>
+      <div class="header-info">
+        <div class="header-title">Hello, <span id="userName">Friend</span></div>
+        <div class="header-sub" id="hintText">Netflix Connect</div>
+      </div>
+      <button class="settings-btn" id="settingsBtn" title="Settings">⚙</button>
+    </div>
+    
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="connect">Connect</button>
+      <button class="tab-btn" data-tab="watchlist">Watchlist</button>
+      <button class="tab-btn" data-tab="stats">Stats</button>
+    </div>
+    
+    <div class="content">
+      <!-- Connect Tab -->
+      <div class="tab-content active" id="tab-connect">
+        <div class="connect-status">
+          <div class="connect-status-main" id="connStatus">Ready to Connect</div>
+          <div class="connect-status-sub" id="stateDetail"></div>
+        </div>
+
+        <div class="btn-group">
+          <button id="invite" class="primary">Send Invite</button>
+          <button id="accept" class="secondary" style="display:none;">Accept Invite</button>
+          <button id="refresh" class="secondary">Refresh</button>
+        </div>
+      </div>
+
+      <!-- Watchlist Tab -->
+      <div class="tab-content" id="tab-watchlist">
+        <div class="list-container" id="watchlistContainer">
+          <div class="empty-state">
+            <div class="empty-state-icon"></div>
+            <div class="empty-state-text">Your shared watchlist is empty</div>
+            <div class="empty-state-sub">Add shows from Netflix to watch together</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Tab -->
+      <div class="tab-content" id="tab-stats">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="statHours">0</div>
+            <div class="stat-label">Hours</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statSessions">0</div>
+            <div class="stat-label">Sessions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statTitles">0</div>
+            <div class="stat-label">Titles</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statEpisodes">0</div>
+            <div class="stat-label">Episodes</div>
+          </div>
+          <div class="stat-card highlight">
+            <div class="stat-value" id="statAllTime">0h</div>
+            <div class="stat-label">All-Time Together</div>
+          </div>
+        </div>
+        <div class="stats-footer">Last 30 days</div>
+      </div>
+    </div>
+
+    <div class="status-toast" id="status"></div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
