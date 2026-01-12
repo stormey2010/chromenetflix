@@ -1,0 +1,50 @@
+{
+  "manifest_version": 3,
+  "name": "Netflix Connect",
+  "version": "0.4.1",
+  "description": "Watch Netflix together with real-time sync and playback controls.",
+  "icons": {
+    "16": "images/icon.png",
+    "48": "images/icon.png",
+    "128": "images/icon.png"
+  },
+  "action": {
+    "default_title": "Netflix Connect",
+    "default_popup": "popup.html",
+    "default_icon": "images/icon.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage", "tabs", "activeTab"],
+  "host_permissions": ["https://www.netflix.com/*", "https://api.stormeydev.com/*", "https://corsproxy.io/*"],
+  "web_accessible_resources": [
+    {
+      "resources": ["page-bridge.js", "page-ui.js", "setup.html"],
+      "matches": ["https://www.netflix.com/*"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://api.stormeydev.com https://corsproxy.io ws: wss:"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.netflix.com/*"],
+      "js": [
+        "js/config.js",
+        "js/utils.js",
+        "js/user.js",
+        "js/telemetry.js",
+        "js/navigation.js",
+        "js/commands.js",
+        "js/events.js",
+        "js/share-button.js",
+        "js/injector.js",
+        "js/messages.js",
+        "js/notifications.js",
+        "js/main.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
